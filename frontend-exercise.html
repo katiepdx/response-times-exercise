@@ -1,0 +1,81 @@
+<!--
+# Real Geeks Frontend Exercise
+
+The goal of the exercise is to create a simple live dashboard that shows a bar
+chart of the last 10 response times (in milliseconds) of requests to
+https://testlars.realgeeks.com/healthcheck, updated every second.
+
+For example (not to scale):
+               ---- ---- ----      ----
+     ----      ---- ---- ---- ---- ----      ----
+---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+22.1 23.3 22.2 25.3 26.7 26.5 23.9 26.3 22.2 23.3
+
+- Render your root component to the `root` <div> provided below.
+- You'll need to disable CORS on requests.
+  // fetch('https://testlars.realgeeks.com/healthcheck', { mode: 'no-cors' }).then(
+  //   response => console.log(response)
+  // )
+- No external CSS or JavaScript should be imported besides the React and
+  ReactDOM libraries already included below.
+- Include all of your CSS and JavaScript in this file in the <style> and
+  <script> tags below.
+- The dashboard should run correctly in the latest version of Chrome when served
+  from the file protocol. Other browsers do not need to be tested for this
+  exercise.
+- Feel free to present the data in additional ways as well, if you choose.
+-->
+
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<title>Real Geeks Frontend Exercise</title>
+<script
+  src="https://unpkg.com/react@16/umd/react.development.js"
+  crossorigin
+></script>
+<script
+  src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"
+  crossorigin
+></script>
+
+<div id="root">
+  hi
+</div>
+
+<style>
+  * {
+    --green: #109648;
+    --persian-green: #18A999;
+    --light-blue: #8AF3FF;
+    --gray: #F7F0F0;
+    --dark-gray: #484349;
+
+    box-sizing: border-box;
+  }
+
+  div {
+    background-color: var(--gray);
+    height: 300px;
+    width: 500px;
+  }
+
+  button {
+    background-color: var(--persian-green);
+    border: none;
+    height: 30px;
+    width: 60px;
+    border-radius: 3px;
+    margin: 2rem;
+  }
+  button:hover {
+    background-color: var(--gray);
+    border: 2px solid var(--persian-green);
+  }
+</style>
+
+<script src='./App.js' type="module">
+  
+</script>
