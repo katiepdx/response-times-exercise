@@ -1,9 +1,12 @@
 export const addNewTime = (timesArray, time) => {
+  if(typeof timesArray === 'undefined') return;
+
+  const copyArray = [...timesArray]
+
   // add new time to array if length is less than 10
-  if(timesArray.length < 9) timesArray.push(time)
-  // great than 10, remove first item, add new item to end
-  if(timesArray.length >= 10) {
-    timesArray.shift()
-    timesArray.push(time)
-  }
+  if(copyArray.length < 10) return [...copyArray, time]
+
+  // greater than 10, remove first item, add new item to end
+  copyArray.shift()
+  return [...copyArray, time]
 }
