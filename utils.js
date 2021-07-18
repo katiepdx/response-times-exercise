@@ -10,3 +10,29 @@ export const addNewTime = (timesArray, time) => {
   copyArray.shift()
   return [...copyArray, time]
 }
+
+export const drawChart = (timesArray) => {
+    // GET CANVAS
+    const canvas = document.getElementById('chart')
+    const ctx = canvas.getContext('2d')
+    
+    // BARS
+    // (first) bar position
+    let x = 5;
+    // bar width 
+    let width = 40;
+    // bar color
+    ctx.fillStyle = '#484349';
+    
+    // ITERATE OVER DISPLAY TIMES + BARS
+    timesArray.map(time => {
+      // bar height
+      const height = time;
+      // fill a rectangle with the height of the value
+      // left x start, y start, bar width, bar height
+      ctx.fillRect(x, canvas.height - height, width, height)
+  
+      // NEXT BAR
+      x = x + width + 10
+    })
+}

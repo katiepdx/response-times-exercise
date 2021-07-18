@@ -54,38 +54,54 @@ For example (not to scale):
     --dark-gray: #484349;
 
     box-sizing: border-box;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
+    font-size: 16px;
+  }
+
+  .App {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    margin: 2rem;
   }
 
   h1 {
-    background-color: none;
-    border-bottom: 2px solid var(--persian-green);
     color: var(--dark-gray);
-  }
-
-  div {
-    background-color: var(--gray);
-    height: 300px;
-    width: 500px;
+    font-size: 2rem;
   }
 
   button {
     background-color: var(--persian-green);
     border: none;
     height: 30px;
-    width: 60px;
+    width: 2rem;
     min-width: fit-content;
-    border-radius: 3px;
+    border-radius: .2rem;
     margin: 2rem;
   }
   button:hover {
-    background-color: var(--gray);
+    background-color: white;
     border: 2px solid var(--persian-green);
   }
 
   canvas {
-    width: 500px;
-    height: 500px;
     border: 2px solid black;
+    border-radius: .2rem;
+  }
+  .label-wrapper {
+    width: 500px;
+  }
+  .chart-x-values {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+  }
+  .x-values {
+    margin: 0;
+    text-align: center;
   }
 </style>
 
