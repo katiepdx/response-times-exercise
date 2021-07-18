@@ -57,6 +57,10 @@ For example (not to scale):
     font-size: 16px;
   }
 
+  html {
+    width: 100vw;
+  }
+
   .App {
     display: flex;
     flex-direction: column;
@@ -177,23 +181,28 @@ For example (not to scale):
     // TOGGLE start/top
     const handleClick = () => setStopToggle(!stopToggle)
 
-    return (
-      React.createElement('div', {className: 'App'}, [
-        // TITLE
-        React.createElement('h1', {key: 'h1'}, 'Response Times'),
 
-        // CHART 
-        React.createElement('canvas', {key: 'canvas-chart', id: 'chart', height: '450px', width: '500px'}, null),
-        // Chart values & labels
-        React.createElement('div', {key: 'chart-label-wrapper', className: 'label-wrapper'}, [
-          React.createElement('section', {key: 'chart-x-values', className: 'chart-x-values'}, [
-            timesArray.map((time, index) => React.createElement('p', {key: `x-val-${index}`, className: 'x-values'}, time))
+    // COMPONENTS
+    const e = React.createElement
+    const Header = () => e('h1', {key: 'h1'}, 'Response Times')
+    const Chart = () => e('canvas', {key: 'canvas-chart', id: 'chart', height: '450px', width: '500px'}, null)
+    const ChartValues = () =>  e('div', {key: 'chart-label-wrapper', className: 'label-wrapper'}, [
+          e('section', {key: 'chart-x-values', className: 'chart-x-values'}, [
+            timesArray.map((time, index) => e('p', {key: `x-val-${index}`, className: 'x-values'}, time))
           ]),
-        ]),
-        React.createElement('div', {key: 'x-label', className: 'x-label'}, 'Fetch Times in ms'),
+        ])
+    const ChartLabels = () => e('div', {key: 'x-label', className: 'x-label'}, 'Fetch Times in ms')
+    const StartStopBtn = () => e('button', {key: 'stop-btn', onClick: handleClick}, 'Start/Stop')
 
-        // START/STOP btn
-        React.createElement('button', {key: 'stop-btn', onClick: handleClick}, 'Start/Stop')
+    return (
+      e('div', {className: 'App'}, [
+        e(Header, {key: 'header-component'}),
+
+        e(Chart, {key: 'chart-component'}),
+        e(ChartValues, {key: 'chart-values-component'}),
+        e(ChartLabels, {key: 'chart-labels-component'}),
+
+        e(StartStopBtn, {key: 'button-component'})
       ])
     )
   }
