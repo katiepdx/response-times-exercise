@@ -1,34 +1,3 @@
-<!--
-# Real Geeks Frontend Exercise
-
-The goal of the exercise is to create a simple live dashboard that shows a bar
-chart of the last 10 response times (in milliseconds) of requests to
-https://testlars.realgeeks.com/healthcheck, updated every second.
-
-For example (not to scale):
-               ---- ---- ----      ----
-     ----      ---- ---- ---- ---- ----      ----
----- ---- ---- ---- ---- ---- ---- ---- ---- ----
----- ---- ---- ---- ---- ---- ---- ---- ---- ----
----- ---- ---- ---- ---- ---- ---- ---- ---- ----
----- ---- ---- ---- ---- ---- ---- ---- ---- ----
-22.1 23.3 22.2 25.3 26.7 26.5 23.9 26.3 22.2 23.3
-
-- Render your root component to the `root` <div> provided below.
-- You'll need to disable CORS on requests.
-  // fetch('https://testlars.realgeeks.com/healthcheck', { mode: 'no-cors' }).then(
-  //   response => console.log(response)
-  // )
-- No external CSS or JavaScript should be imported besides the React and
-  ReactDOM libraries already included below.
-- Include all of your CSS and JavaScript in this file in the <style> and
-  <script> tags below.
-- The dashboard should run correctly in the latest version of Chrome when served
-  from the file protocol. Other browsers do not need to be tested for this
-  exercise.
-- Feel free to present the data in additional ways as well, if you choose.
--->
-
 <!DOCTYPE html>
 <meta charset="utf-8" />
 <title>Real Geeks Frontend Exercise</title>
@@ -111,16 +80,27 @@ For example (not to scale):
   // CREATE COMPONENT
   const App = () => {
     const [timesArray, setTimesArray] = React.useState([])
-    const [stopToggle, setStopToggle] = React.useState(false)
+    const [stopToggle, setStopToggle] = React.useState(true)
+    const [userThreshold, setUserThreshold] = React.useState(120)
+    const [userInterval, setUserInterval] = React.useState(5)
 
     let fetchStart;
     let fetchEnd;
     let responseTime;
 
+    const alertThreshold = userThreshold;
+
     // GET UPDATED CHART DATA when timesArray updates
     React.useEffect(() => {
       // DRAW CHART with fetch times
       drawChart(timesArray)
+
+      // check interval
+      // grab last 5
+      const intervalArr = timesArray.slice(-userInterval)
+      const filteredTimes = intervalArr.filter(time => time > alertThreshold)
+
+      if(filteredTimes.length === userInterval) console.log('Alert: times exceed threshold')
     }, [timesArray])
 
     
@@ -134,7 +114,7 @@ For example (not to scale):
       ctx.fillStyle = '#484349';
       
       // add bars
-      timesArray.map(time => {
+      timesArray.slice(-10).map(time => {
         const height = time;
         ctx.fillRect(x, canvas.height - height, barWidth, height)
     
@@ -148,10 +128,10 @@ For example (not to scale):
     
       const copyArray = [...timesArray]
     
-      // add new time to array if length is less than 10
-      if(copyArray.length < 10) return [...copyArray, time]
+      // add new time to array if length is less than 10 minutes
+      if(copyArray.length < 600) return [...copyArray, time]
     
-      // greater than 10, remove first item, add new item to end
+      // greater than 10 minutes, remove first item, add new item to end
       copyArray.shift()
       return [...copyArray, time]
     }
@@ -166,6 +146,9 @@ For example (not to scale):
           // calc fetch time
           fetchEnd = Date.now()
           responseTime = (fetchEnd - fetchStart)
+
+          // compare times
+          if(responseTime >= alertThreshold) console.log('Amount exceeded')
           
           const updatedArr = addNewTime(timesArray, responseTime)
           
@@ -181,17 +164,25 @@ For example (not to scale):
     // TOGGLE start/top
     const handleClick = () => setStopToggle(!stopToggle)
 
+    const handleThresholdChange = (e) => setUserThreshold(parseInt(e.target.value))
+    const handleIntervalChange = (e) => setUserInterval(parseInt(e.target.value))
+
+    const slicedArr = timesArray.slice(-10);
 
     // COMPONENTS
     const e = React.createElement
-    const Header = () => e('h1', {key: 'h1'}, 'Response Times')
+    const Header = () => e('h1', {key: 'h1'}, `Response Times -- ${userThreshold}`)
     const Chart = () => e('canvas', {key: 'canvas-chart', id: 'chart', height: '450px', width: '500px'}, null)
     const ChartValues = () =>  e('div', {key: 'chart-label-wrapper', className: 'label-wrapper'}, [
-          e('section', {key: 'chart-x-values', className: 'chart-x-values'}, [
-            timesArray.map((time, index) => e('p', {key: `x-val-${index}`, className: 'x-values'}, time))
+          e('section', {key: 'chart-x-values', className: 'chart-x-values'}, [ 
+            slicedArr.map((time, index) => e('p', {key: `x-val-${index}`, className: 'x-values'}, time))
           ]),
         ])
     const ChartLabels = () => e('div', {key: 'x-label', className: 'x-label'}, 'Fetch Times in ms')
+
+    const ThresholdInput = () => e('input', {key: 'threshold-input', onChange: handleThresholdChange, value: userThreshold})
+    const IntervalInput = () => e('input', {key: 'interval-input', onChange: handleIntervalChange, value: userInterval})
+
     const StartStopBtn = () => e('button', {key: 'stop-btn', onClick: handleClick}, 'Start/Stop')
 
     return (
@@ -201,6 +192,9 @@ For example (not to scale):
         e(Chart, {key: 'chart-component'}),
         e(ChartValues, {key: 'chart-values-component'}),
         e(ChartLabels, {key: 'chart-labels-component'}),
+
+        e(ThresholdInput, {key: 'threshold-input'}),
+        e(IntervalInput, {key: 'interval-input'}),
 
         e(StartStopBtn, {key: 'button-component'})
       ])
